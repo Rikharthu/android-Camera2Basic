@@ -1,4 +1,4 @@
-#Mon Nov 28 15:36:07 EET 2016
+#Tue Nov 29 16:36:01 EET 2016
 base.0=C\:\\Workspace\\Camera2Basic\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_6911ce2134460dbbd4f707c82a6e8076aefe0d76
 renamed.1=classes2.dex
 renamed.0=classes.dex

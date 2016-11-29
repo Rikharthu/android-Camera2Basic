@@ -5,36 +5,40 @@
     density="xxhdpi"
     format="8"
     plugin-version="2.2.2"
-    timestamp="1125725266709689"
-    token="-9077247472059481071" >
+    timestamp="1217437177015661"
+    token="-9077247472059481071"
+    verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="0" />
+        duration="853" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="0" />
+        duration="135" />
     <task
         name="verifier"
-        duration="0" />
+        duration="35" />
+
+    <artifact
+        location="C:\Workspace\Camera2Basic\Application\build\intermediates\transforms\dex\debug\folders\1000\5\slice_3\classes.dex"
+        type="DEX" />
 
     <build
-        timestamp="1124556798386001"
+        timestamp="1214577832998965"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="C:\Workspace\Camera2Basic\Application\build\outputs\apk\Application-debug.apk"
             type="MAIN" />
     </build>
     <build
-        timestamp="1125697347747088"
+        timestamp="1217437177015661"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="C:\Workspace\Camera2Basic\Application\build\intermediates\transforms\dex\debug\folders\1000\5\slice_3\classes.dex"
             type="DEX" />
     </build>
-    <build timestamp="1125725266709689" />
 
 </instant-run>

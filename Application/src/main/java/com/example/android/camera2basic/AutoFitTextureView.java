@@ -54,6 +54,7 @@ public class AutoFitTextureView extends TextureView {
         }
         mRatioWidth = width;
         mRatioHeight = height;
+        // trigger onMeasure()
         requestLayout();
     }
 
@@ -65,6 +66,7 @@ public class AutoFitTextureView extends TextureView {
         if (0 == mRatioWidth || 0 == mRatioHeight) {
             setMeasuredDimension(width, height);
         } else {
+            // measure width and height according to aspect ratio
             if (width < height * mRatioWidth / mRatioHeight) {
                 setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
             } else {

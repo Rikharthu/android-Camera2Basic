@@ -393,7 +393,7 @@ public class Camera2BasicFragment extends Fragment
         int h = aspectRatio.getHeight();
         for (Size option : choices) {
             if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
-                    option.getHeight() == option.getWidth() * h / w) {
+                    option.getHeight() == option.getWidth() * h / w) { // same aspect ratio
                 if (option.getWidth() >= textureViewWidth &&
                     option.getHeight() >= textureViewHeight) {
                     bigEnough.add(option);
@@ -533,7 +533,7 @@ public class Camera2BasicFragment extends Fragment
                 // угол смещения камеры по часовой
                 mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
                 boolean swappedDimensions = false;
-                // повернуть изображение с камеры если если углы наклона (включаю противоположные)
+                // повернуть изображение с камеры если если углы наклона (включая противоположные)
                 // камеры и девайса не совпадают (90==270, 0==180)
                 /* http://startandroid.ru/ru/uroki/vse-uroki-spiskom/264-urok-132-kamera-vyvod-izobrazhenija-na-ekran-obrabotka-povorota.html */
                 switch (displayRotation) {
@@ -564,6 +564,7 @@ public class Camera2BasicFragment extends Fragment
                 int maxPreviewWidth = displaySize.x;
                 int maxPreviewHeight = displaySize.y;
 
+                // swap dimensions to compensate orientation
                 if (swappedDimensions) {
                     rotatedPreviewWidth = height;
                     rotatedPreviewHeight = width;
@@ -628,6 +629,7 @@ public class Camera2BasicFragment extends Fragment
         Activity activity = getActivity();
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
+            // try to lock camera for preparing
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
@@ -692,6 +694,7 @@ public class Camera2BasicFragment extends Fragment
      */
     private void createCameraPreviewSession() {
         try {
+            // Captures frames from Image stream
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
 
@@ -702,6 +705,7 @@ public class Camera2BasicFragment extends Fragment
             Surface surface = new Surface(texture);
 
             // We set up a CaptureRequest.Builder with the output Surface.
+            // defines capture parameters for the camera
             mPreviewRequestBuilder
                     = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             mPreviewRequestBuilder.addTarget(surface);
@@ -762,12 +766,12 @@ public class Camera2BasicFragment extends Fragment
         }
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         Matrix matrix = new Matrix();
-        RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
-        RectF bufferRect = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth());
+        RectF viewRect = new RectF(0, 0, viewWidth, viewHeight); // TextureView, what we see
+        RectF bufferRect = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth()); // What is captured
         float centerX = viewRect.centerX();
         float centerY = viewRect.centerY();
-        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
+        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) { // Landscape
+            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY()); // centers both Rectangles
             matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
             float scale = Math.max(
                     (float) viewHeight / mPreviewSize.getHeight(),
@@ -777,6 +781,9 @@ public class Camera2BasicFragment extends Fragment
         } else if (Surface.ROTATION_180 == rotation) {
             matrix.postRotate(180, centerX, centerY);
         }
+        // Aspect ratio of Texture View is same with Camera's output
+        // and is biggest possible
+        // tell TextureView to scale it's content images (not size) to fill viewports
         mTextureView.setTransform(matrix);
     }
 
