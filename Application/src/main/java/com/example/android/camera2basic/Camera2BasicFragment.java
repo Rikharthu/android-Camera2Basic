@@ -392,7 +392,7 @@ public class Camera2BasicFragment extends Fragment
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
         for (Size option : choices) {
-            if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
+            if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight && // less than maximum guaranteed size
                     option.getHeight() == option.getWidth() * h / w) { // same aspect ratio
                 if (option.getWidth() >= textureViewWidth &&
                     option.getHeight() >= textureViewHeight) {
@@ -1037,6 +1037,7 @@ public class Camera2BasicFragment extends Fragment
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // request camera permission
                             FragmentCompat.requestPermissions(parent,
                                     new String[]{Manifest.permission.CAMERA},
                                     REQUEST_CAMERA_PERMISSION);
@@ -1046,6 +1047,7 @@ public class Camera2BasicFragment extends Fragment
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    // shutdown
                                     Activity activity = parent.getActivity();
                                     if (activity != null) {
                                         activity.finish();
